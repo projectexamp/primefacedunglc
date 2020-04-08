@@ -5,18 +5,35 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<script name="jquery/jquery.js" library="primefaces"></script>
-	<title>Register Employee</title>
+	<title>List</title>
 </h:head>
-<h:form>
-	<p:growl id="messages"></p:growl>
-	<p:panelGrid columns="2">
-		<p:outputLabel value="Enter Employee Name:"></p:outputLabel>
-		<p:inputText value="#{registerEmployee.employee.employeeName}"></p:inputText>
-		<p:outputLabel value="Enter Employee Hire Date:"></p:outputLabel>
-		<p:calendar value="#{registerEmployee.employee.employeeHireDate}"></p:calendar>
-		<p:outputLabel value="Enter Employee Salary:"></p:outputLabel>
-		<p:inputText value="#{registerEmployee.employee.employeeSalary}"></p:inputText>						
-	</p:panelGrid>
-	<p:commandButton value="Register" action="#{registerEmployee.register}" update="messages"></p:commandButton>
+    
+    <h:form>  
+    <p:growl id="messages"/>
+ 
+    <p:menubar>
+       <p:menuitem value="List" url="list.xhtml" />
+       <p:menuitem value="Create" url="create.xhtml" />
+    </p:menubar>
 </h:form>
+    
+<p:dataTable var="emp" value="#{listEmployee.listEmps}">
+    <p:column headerText="Id">
+        <h:outputText value="#{emp.employeeId}" />
+    </p:column>
+ 
+    <p:column headerText="Name">
+        <h:outputText value="#{emp.employeeName}" />
+    </p:column>
+ 
+    <p:column headerText="Hire Date">
+        <h:outputText value="#{emp.employeeHireDate}" />
+    </p:column>
+ 
+    <p:column headerText="Salary">
+        <h:outputText value="#{emp.employeeSalary}" />
+    </p:column>
+</p:dataTable>
+    
+    
 </html>

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.journaldev.hibernate.data.Employee;
+import java.util.List;
+import org.hibernate.Query;
 
 @Component
 public class EmployeeService {
@@ -28,5 +30,13 @@ public class EmployeeService {
 		// Save employee, saving behavior get done in a transactional manner
 		session.save(emp);		
 	}
+        @Transactional
+        public List<Employee> getAll(){
+            // Acquire session
+		Session session = sessionFactory.getCurrentSession();
+                Query hql = session.createQuery("Select emp from Employee emp");
+                List<Employee> emps = hql.list();
+                return emps;
+        }
 
 }
