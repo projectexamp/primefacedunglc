@@ -43,5 +43,6 @@ Contributor(s):
   <schema-selection match-catalog="primeface"/>
   <table-filter match-name="employee"/>
   <table-filter match-name="user"/>
+  <table-filter match-name="role"/>
   <table-filter match-name="car"/>
 </hibernate-reverse-engineering>

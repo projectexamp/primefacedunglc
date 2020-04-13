@@ -12,6 +12,6 @@
         <property name="dialect">org.hibernate.dialect.MySQLDialect</property>  
         <property name="hibernate.hbm2ddl.auto">update</property>  
         <mapping class="com.model.pojo.User" />  
-        <mapping class="com.model.pojo.User" />  
+        <mapping class="com.model.pojo.Role" />  
     </session-factory>  
 </hibernate-configuration>  

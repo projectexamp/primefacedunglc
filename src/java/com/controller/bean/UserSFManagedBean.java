@@ -5,17 +5,22 @@
  */
 package com.controller.bean;
 
+import com.dao.RoleDAO;
 import com.dao.UserDAO;
 import com.model.pojo.User;
+import com.model.pojo.Role;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
-
+import org.primefaces.component.dialog.Dialog;
 /**
  *
  * @author ABC
@@ -27,7 +32,9 @@ public class UserSFManagedBean implements Serializable {
     private List< User> usersList;
     private List< User> searchList;
     private List< User> searchByRecordNoList;
+    private List< Role> listRoles;
     UserDAO userDao = new UserDAO();
+    RoleDAO roleDao = new RoleDAO();
     User user = new User();
     User newuser = new User();
 
@@ -46,6 +53,17 @@ public class UserSFManagedBean implements Serializable {
             userId = userDao.getId();
             newuser.setId(userId);
             newuser.setRecordNo(Integer.toString(userId));
+            Set<Role> roles = new HashSet<>();
+            if(newuser.getRole()!= null && newuser.getRole().size()>0){
+                Object[] listRoleID = newuser.getRole().toArray();
+                for(Object roleID: listRoleID){
+                    Role r = new Role();
+                    r.setRoleID(Long.parseLong((String)roleID));
+                    roles.add(r);
+                }
+                newuser.setRole(roles);
+                
+            }
             userDao.add(newuser);
             System.out.println("User successfully saved.");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Save Information", "User successfully saved.");
@@ -88,7 +106,15 @@ public class UserSFManagedBean implements Serializable {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Number of Record Selected:", Integer.toString(count));
         RequestContext.getCurrentInstance().showMessageInDialog(message);
     }
-
+    
+    public List<Role> getListRoles(){
+        return roleDao.AllRoles();
+    }
+    
+    public void setlistRoles(List<Role> roles){
+        this.listRoles = roles;
+    }
+    
     public void editUser(User us) {
         this.newuser = us;
     }
@@ -101,6 +127,10 @@ public class UserSFManagedBean implements Serializable {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+    
+//    public void view() {
+//        PrimeFacesContext.getCurrentInstance().openDynamic("viewCars");
+//    }
 
     public User getUser() {
         return user;
@@ -109,7 +139,7 @@ public class UserSFManagedBean implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-
+    
     public User getNewuser() {
         return newuser;
     }
