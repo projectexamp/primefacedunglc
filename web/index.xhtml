@@ -16,11 +16,11 @@
         <h:form>
 
             <p:commandButton action="Search?faces-redirect=true" icon="ui-icon-search"  value="Search" />
+            <p:commandButton action="role?faces-redirect=true" icon="ui-icon-search"  value="Role" />
 
         </h:form>
 
-
-        <p:commandButton value="Thêm" type="button" onclick="PF('dlg').show()" />
+        <p:commandButton value="Thêm" update=":form2"  type="submit" action="#{userBean.resetNewUser()}" onclick="PF('dlg').show()" />
         <p:spacer>    </p:spacer>     
         <h:form id="form1">
 
@@ -93,7 +93,7 @@
                     <p>Remark: <p:inputTextarea value="#{userBean.newuser.remark}" /></p>
                     <h:outputText value="Role:" />
 
-                    <p:selectCheckboxMenu label="chọn" value="#{userBean.newuser.role}"  panelStyle="width:250px" id="bookSelect">
+                    <p:selectCheckboxMenu label="chọn" value="#{userBean.newuser.roleString}"  panelStyle="width:250px" id="bookSelect">
                         <f:selectItems value="#{userBean.listRoles}" var="b" itemValue="#{b.roleID}" itemLabel="#{b.roleName}"/>
 <!--			<f:converter converterId="BookConverter"/>-->
 		   </p:selectCheckboxMenu>	

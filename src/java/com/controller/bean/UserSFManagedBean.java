@@ -40,7 +40,6 @@ public class UserSFManagedBean implements Serializable {
 
     public List< User> getUsers() {
         usersList = userDao.AllUsers();
-        int count = usersList.size();
         return usersList;
     }
 
@@ -54,11 +53,11 @@ public class UserSFManagedBean implements Serializable {
             newuser.setId(userId);
             newuser.setRecordNo(Integer.toString(userId));
             Set<Role> roles = new HashSet<>();
-            if(newuser.getRole()!= null && newuser.getRole().size()>0){
-                Object[] listRoleID = newuser.getRole().toArray();
-                for(Object roleID: listRoleID){
+            if(newuser.getRoletring()!= null && newuser.getRoletring().size()>0){
+                List<String> listRoleID = newuser.getRoletring();
+                for(String roleID: listRoleID){
                     Role r = new Role();
-                    r.setRoleID(Long.parseLong((String)roleID));
+                    r.setRoleID(Long.parseLong(roleID));
                     roles.add(r);
                 }
                 newuser.setRole(roles);
@@ -76,12 +75,26 @@ public class UserSFManagedBean implements Serializable {
     public void changeUser(User user) {
         this.user = user;
     }
-
-    public void UpdateUser(User user) {
-        String Name = user.getName();
+    public void resetNewUser() {
+        this.newuser = new User();
+    }
+    public void UpdateUser(User us) {
+        String Name = us.getName();
         FacesMessage message1 = new FacesMessage(FacesMessage.SEVERITY_INFO, "Name", Name);
         RequestContext.getCurrentInstance().showMessageInDialog(message1);
-        userDao.update(user);
+        
+         Set<Role> roles = new HashSet<>();
+            if(us.getRoletring()!= null && us.getRoletring().size()>0){
+                List<String> listRoleID = us.getRoletring();
+                for(String roleID: listRoleID){
+                    Role r = new Role();
+                    r.setRoleID(Long.parseLong(roleID));
+                    roles.add(r);
+                }
+                us.setRole(roles);
+                
+            }
+        userDao.update(us);
         System.out.println("User Info successfully saved.");
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Save Information", "User updated successfully .");
         RequestContext.getCurrentInstance().showMessageInDialog(message);
