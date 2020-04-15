@@ -34,6 +34,10 @@ public class User implements java.io.Serializable {
     private Integer id;
     @Column(name = "RecordNo", length = 20)
     private String recordNo;
+    @Column(name = "UserName", length = 20)
+    private String userName;
+    @Column(name = "PassWord", length = 20)
+    private String passWord;
     @Column(name = "Name", length = 50)
     private String name;
     @Column(name = "Age")
@@ -55,7 +59,7 @@ public class User implements java.io.Serializable {
     
     public User() {
     }
-
+    
     public void setRoleString(List<String> roleString) {
         this.roleString = roleString;
     }
@@ -69,6 +73,22 @@ public class User implements java.io.Serializable {
         }
         roleString = rolesID;
         return roleString;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassWord() {
+        return passWord;
+    }
+
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
     }
     
     public List<String> getRoletring() {

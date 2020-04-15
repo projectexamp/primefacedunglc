@@ -11,18 +11,16 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import com.util.HibernateUtil;
 import com.model.pojo.User;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 /**
  *
  * @author Raichand
  */
-
 public class UserDAO {
 
-    private User user;
-    private User newuser;
     private List<User> DaoAllUsers;
-    private List<User> DaoSearchUserList;
     //Session session;
 
     public List<User> AllUsers() {
@@ -139,4 +137,43 @@ public class UserDAO {
         }
         session.close();
     }
+
+    public boolean login(String userName, String passWord) {
+        
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<User> us = new ArrayList<>();
+
+        try {
+            session.beginTransaction();
+            Query qu = session.createQuery("From User U where U.userName =:userName and U.passWord = :passWord");//User is the entity not the table
+
+            qu.setParameter("userName", userName);
+            qu.setParameter("passWord", passWord);
+            us = qu.list();
+            session.getTransaction().commit();
+            if(us.size()>0) return true;
+            else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "LoginDAO!",
+                        "Wrong password message test!"));
+                return false;
+            }
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Database Error",
+                    "Unable to connect database"));
+            System.out.println("Error in login() -->" + ex.getMessage());
+            return false;
+
+        } finally {
+
+            session.close();
+        }
+
+    }
+    
+    
+    
+      
+
 }
