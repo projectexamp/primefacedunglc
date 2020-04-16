@@ -13,5 +13,6 @@
         <property name="hibernate.hbm2ddl.auto">update</property>  
         <mapping class="com.model.pojo.User" />  
         <mapping class="com.model.pojo.Role" />  
+        <mapping class="com.model.pojo.Function" />  
     </session-factory>  
 </hibernate-configuration>  

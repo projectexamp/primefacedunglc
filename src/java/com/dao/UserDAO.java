@@ -27,7 +27,6 @@ public class UserDAO {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         try {
-
             session.beginTransaction();
             String hql = "select U from User U";
             Query query = session.createQuery(hql);
@@ -55,6 +54,33 @@ public class UserDAO {
 
         session.close();
         return userId;
+    }
+    
+    public User getUserbyUserName(String userName) {
+       Session session = HibernateUtil.getSessionFactory().openSession();
+        List<User> userList = new ArrayList<>();
+
+        try {
+
+            session.beginTransaction();
+            Query qu = session.createQuery("From User U where U.userName =:userName");//User is the entity not the table
+            qu.setParameter("userName", userName);
+            userList = qu.list();
+            if(userList!=null && userList.size()>0){
+                return userList.get(0);
+            }
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+
+        } finally {
+
+            session.close();
+        }
+        return null;
+
     }
 
     public List<User> SearchByRecordNo(String RecordNo) {
