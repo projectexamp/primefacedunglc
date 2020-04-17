@@ -4,6 +4,7 @@ import com.dao.UserDAO;
 import com.model.pojo.Role;
 import com.model.pojo.User;
 import com.util.Util;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class LoginBean implements Serializable {
         this.uname = uname;
     }
 
-    public String loginProject() {
+    public String loginProject() throws IOException {
         boolean result = userDao.login(uname, password);
         if (result) {
 
@@ -57,15 +58,7 @@ public class LoginBean implements Serializable {
 
             if (user != null && user.getRole() != null && user.getRole().size() > 0) {
 
-                List<String> roles = new ArrayList<>();
-                for (Role r : user.getRole()) {
-                    roles.add(r.getRoleName());
-                }
-                if (roles.contains("ADMIN")) {
-                    return "index";
-                } else if (roles.contains("USER")) {
-                    return "role";
-                }
+               FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
             }
 
         }

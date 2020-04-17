@@ -5,14 +5,19 @@
  */
 package com.controller.bean;
 
+import com.dao.FunctionDAO;
 import com.dao.RoleDAO;
 import com.model.pojo.Role;
+import com.model.pojo.Function;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import org.primefaces.context.RequestContext;
+
 /**
  *
  * @author ABC
@@ -23,8 +28,10 @@ public class RoleBean implements Serializable {
 
     private List< Role> roles;
     RoleDAO roleDao = new RoleDAO();
+    FunctionDAO functionDao = new FunctionDAO();
     Role role = new Role();
     Role newRole = new Role();
+    private List< Function> listFunctions;
 
     public List< Role> getRoles() {
         roles = roleDao.AllRoles();
@@ -32,7 +39,16 @@ public class RoleBean implements Serializable {
     }
 
     public void addRole() {
-
+        Set<Function> functions = new HashSet<>();
+        if (newRole.getFunctionStr() != null && newRole.getFunctionStr().size() > 0) {
+            List<String> listFunctionID = newRole.getFunctionStr();
+            for (String funcID : listFunctionID) {
+                Function f = new Function();
+                f.setFunctionID(Long.parseLong(funcID));
+                functions.add(f);
+            }
+            newRole.setFunction(functions);
+        }
         if (newRole.getRoleID() > 0) {
             UpdateRole(newRole);
         } else {
@@ -48,9 +64,11 @@ public class RoleBean implements Serializable {
     public void changeRole(Role r) {
         this.role = r;
     }
+
     public void resetNewRole() {
         this.newRole = new Role();
     }
+
     public void UpdateRole(Role r) {
         String Name = r.getRoleName();
         FacesMessage message1 = new FacesMessage(FacesMessage.SEVERITY_INFO, "Name", Name);
@@ -63,43 +81,27 @@ public class RoleBean implements Serializable {
     }
 
     public void deleteRole(Role r) {
-       
+
         roleDao.delete(r);
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Delete", "Record deleted successfully");
         RequestContext.getCurrentInstance().showMessageInDialog(message);
     }
 
-    
-    
-    public List<Role> getListRoles(){
+    public List<Role> getListRoles() {
         return roleDao.AllRoles();
     }
-    
-    
+
     public void editRole(Role r) {
         this.newRole = r;
     }
 
- 
-    
-//    public void view() {
-//        PrimeFacesContext.getCurrentInstance().openDynamic("viewCars");
-//    }
+    public List<Function> getListFunctions() {
+        return functionDao.AllFunctions();
+    }
 
-   
-
-//    public void onRowEdit(RowEditEvent event) {
-//        FacesMessage msg = new FacesMessage(" Edited Record No", ((User) event.getObject()).getRecordNo());
-//        FacesContext.getCurrentInstance().addMessage(null, msg);
-//        Role editedRole = (Role) event.getObject();
-//        roleDao.update(editedRole);
-//    }
-//
-//    public void onCancel(RowEditEvent event) {
-//        FacesMessage msg = new FacesMessage("Edit Cancelled");
-//        FacesContext.getCurrentInstance().addMessage(null, msg);
-//        usersList.remove((User) event.getObject());
-//    }
+    public void setListFunctions(List<Function> listFunctions) {
+        this.listFunctions = listFunctions;
+    }
 
     public Role getRole() {
         return role;

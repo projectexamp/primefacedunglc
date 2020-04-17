@@ -28,9 +28,10 @@ public class RoleDAO {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         try {
-
             session.beginTransaction();
-            DaoAllRole = session.createCriteria(Role.class).list();
+            String hql = "select R from Role R";
+            Query query = session.createQuery(hql);
+            DaoAllRole = query.list();
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
